@@ -8,11 +8,13 @@ import {
   CREATE_NEW_SERVICE_API,
 } from "../../services/apiUrl";
 import LoadingButton from "../uiHelper/LoadingButton";
+import LoadingSpinner from "../uiHelper/LoadingSpinner";
 import NotFoundDetails from "../uiHelper/NotFoundDetails";
 
 const AddService = () => {
   const [submitting, setSubmitting] = useState(false);
   const [haveAccess, setHaveAccess] = useState(false);
+  const [contentLoading, setContentLoading] = useState(true);
   const email = sessionStorage.getItem("email");
   const {
     register,
@@ -23,6 +25,7 @@ const AddService = () => {
   useEffect(() => {
     axios.post(CHECK_ACCESS_API, { email: email }).then((res) => {
       setHaveAccess(res.data);
+      setContentLoading(false);
     });
   }, [email]);
 
@@ -53,115 +56,122 @@ const AddService = () => {
   };
   return (
     <>
-      {haveAccess ? (
-        <>
-          <section className="bg-info py-5">
-            <Container>
-              <h2 className="text-primary display-5 fw-bold mb-5">
-                Add Service
-              </h2>
-              <p className="text-secondary">
-                Lorem, ipsum dolor sit consectetur adipisicing elit. Odio
-                beatae, blanditiis <br className="d-none d-md-block" /> optio
-                neque inventore sequi doloremque. Animi.
-              </p>
-            </Container>
-          </section>
-          <section className="py-5">
-            <Container>
-              <Row>
-                <Col md={6} className="offset-md-3">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Group className="mb-3">
-                      <Form.Label className="text-secondary">
-                        Service Image <span className="text-danger">*</span>
-                      </Form.Label>
-                      <Form.Control
-                        className="border-danger"
-                        type="file"
-                        name="image"
-                        {...register("image", { required: true })}
-                      />
-
-                      {errors.image && (
-                        <Form.Text className="text-danger">
-                          Service image is required!
-                        </Form.Text>
-                      )}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                      <Form.Label className="text-secondary">
-                        Service Title <span className="text-danger">*</span>
-                      </Form.Label>
-                      <Form.Control
-                        className="border-danger"
-                        type="text"
-                        name="title"
-                        {...register("title", { required: true })}
-                      />
-
-                      {errors.title && (
-                        <Form.Text className="text-danger">
-                          Enter service title here!
-                        </Form.Text>
-                      )}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                      <Form.Label className="text-secondary">
-                        Service Price <span className="text-danger">*</span>
-                      </Form.Label>
-                      <Form.Control
-                        className="border-danger"
-                        type="text"
-                        name="price"
-                        {...register("price", {
-                          required: true,
-                          pattern: /^[1-9][0-9]*$/,
-                        })}
-                      />
-
-                      {errors.price && (
-                        <Form.Text className="text-danger">
-                          Price must be a positive integer number! For ex: 199
-                        </Form.Text>
-                      )}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                      <Form.Label className="text-secondary">
-                        Service Description{" "}
-                        <span className="text-danger">*</span>
-                      </Form.Label>
-                      <Form.Control
-                        className="border-danger"
-                        as="textarea"
-                        rows={7}
-                        name="description"
-                        {...register("description", { required: true })}
-                      />
-
-                      {errors.description && (
-                        <Form.Text className="text-danger">
-                          Write a service description!
-                        </Form.Text>
-                      )}
-                    </Form.Group>
-
-                    <div>
-                      <button className="btn btn-primary" type="submit">
-                        {submitting ? <LoadingButton /> : "Add Service"}
-                      </button>
-                    </div>
-                  </form>
-                </Col>
-              </Row>
-            </Container>
-          </section>
-        </>
+      {contentLoading ? (
+        <LoadingSpinner />
       ) : (
-        <NotFoundDetails data="404 Not Found!" />
+        <>
+          {haveAccess ? (
+            <>
+              <section className="bg-info py-5">
+                <Container>
+                  <h2 className="text-primary display-5 fw-bold mb-5">
+                    Add Service
+                  </h2>
+                  <p className="text-secondary">
+                    Lorem, ipsum dolor sit consectetur adipisicing elit. Odio
+                    beatae, blanditiis <br className="d-none d-md-block" />{" "}
+                    optio neque inventore sequi doloremque. Animi.
+                  </p>
+                </Container>
+              </section>
+              <section className="py-5">
+                <Container>
+                  <Row>
+                    <Col md={6} className="offset-md-3">
+                      <form onSubmit={handleSubmit(onSubmit)}>
+                        <Form.Group className="mb-3">
+                          <Form.Label className="text-secondary">
+                            Service Image <span className="text-danger">*</span>
+                          </Form.Label>
+                          <Form.Control
+                            className="border-danger"
+                            type="file"
+                            name="image"
+                            {...register("image", { required: true })}
+                          />
+
+                          {errors.image && (
+                            <Form.Text className="text-danger">
+                              Service image is required!
+                            </Form.Text>
+                          )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                          <Form.Label className="text-secondary">
+                            Service Title <span className="text-danger">*</span>
+                          </Form.Label>
+                          <Form.Control
+                            className="border-danger"
+                            type="text"
+                            name="title"
+                            {...register("title", { required: true })}
+                          />
+
+                          {errors.title && (
+                            <Form.Text className="text-danger">
+                              Enter service title here!
+                            </Form.Text>
+                          )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                          <Form.Label className="text-secondary">
+                            Service Price <span className="text-danger">*</span>
+                          </Form.Label>
+                          <Form.Control
+                            className="border-danger"
+                            type="text"
+                            name="price"
+                            {...register("price", {
+                              required: true,
+                              pattern: /^[1-9][0-9]*$/,
+                            })}
+                          />
+
+                          {errors.price && (
+                            <Form.Text className="text-danger">
+                              Price must be a positive integer number! For ex:
+                              199
+                            </Form.Text>
+                          )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                          <Form.Label className="text-secondary">
+                            Service Description{" "}
+                            <span className="text-danger">*</span>
+                          </Form.Label>
+                          <Form.Control
+                            className="border-danger"
+                            as="textarea"
+                            rows={7}
+                            name="description"
+                            {...register("description", { required: true })}
+                          />
+
+                          {errors.description && (
+                            <Form.Text className="text-danger">
+                              Write a service description!
+                            </Form.Text>
+                          )}
+                        </Form.Group>
+
+                        <div>
+                          <button className="btn btn-primary" type="submit">
+                            {submitting ? <LoadingButton /> : "Add Service"}
+                          </button>
+                        </div>
+                      </form>
+                    </Col>
+                  </Row>
+                </Container>
+              </section>
+            </>
+          ) : (
+            <NotFoundDetails data="404 Not Found!" />
+          )}
+        </>
       )}
     </>
   );
