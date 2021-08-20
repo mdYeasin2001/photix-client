@@ -47,7 +47,7 @@ const AddService = () => {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log(err);
+        // console.log(err);
         toast.error("Oops! please try again");
       });
   };

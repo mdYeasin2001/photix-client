@@ -20,7 +20,7 @@ const DeleteConfirmationModal = ({
       .delete(`${DELETE_SERVICE_API}/${selectedServiceId}`)
       .then((res) => {
         setSubmitting(false);
-        console.log(res);
+        // console.log(res);
         if (res.data.deletedCount > 0) {
           toast.success("Service deleted successfully");
           setReload(new Date().getTime());
@@ -29,7 +29,7 @@ const DeleteConfirmationModal = ({
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log(err);
+        // console.log(err);
         toast.error("Oops! Error deleting service");
       });
   };

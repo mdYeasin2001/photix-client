@@ -25,14 +25,12 @@ const ManageOrders = () => {
       setContentLoading(false);
     });
   }, [email, loadAgain]);
-  console.log("access", haveAccess);
 
   const updateStatus = (id, status) => {
-    console.log(id, status);
     axios
       .patch(UPDATE_ORDER_STATUS_API, { id, status })
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         setLoadAgain(new Date().getTime());
         toast.success("Order status updated successfully");
       })

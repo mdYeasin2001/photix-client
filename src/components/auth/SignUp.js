@@ -26,7 +26,6 @@ const SignUp = () => {
     if (data.password === data.confirm_password) {
       setSubmitting(true);
       setError(null);
-      //   console.log(data);
       firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password)
