@@ -1,0 +1,10 @@
+const BASE_URL = "http://localhost:8080";
+export const CREATE_NEW_SERVICE_API = `${BASE_URL}/add-service`;
+export const SERVICES_LIST_API = `${BASE_URL}/services`;
+export const MAKE_ORDER_API = `${BASE_URL}/take-order`;
+export const ORDER_LIST_BY_EACH_USER_API = `${BASE_URL}/orders-by-each-user`;
+export const ORDER_LIST_API = `${BASE_URL}/orders`;
+export const CHECK_ACCESS_API = `${BASE_URL}/check-access`;
+export const UPDATE_ORDER_STATUS_API = `${BASE_URL}/update-order-status`;
+export const MANAGE_SERVICES_LIST_API = `${BASE_URL}/manage-service`;
+export const DELETE_SERVICE_API = `${BASE_URL}/delete-service`;
