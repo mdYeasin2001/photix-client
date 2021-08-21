@@ -59,7 +59,7 @@ const Checkout = () => {
                 <Col md={3}>
                   <img
                     className="img-fluid"
-                    src={`data:${service[0].image.contentType};base64,${service[0].image.img}`}
+                    src={service[0].image}
                     alt={service[0].title}
                   />
                 </Col>

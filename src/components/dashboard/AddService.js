@@ -13,6 +13,7 @@ import NotFoundDetails from "../uiHelper/NotFoundDetails";
 
 const AddService = () => {
   const [submitting, setSubmitting] = useState(false);
+  const [imageURL, setImageURL] = useState(null);
   const [haveAccess, setHaveAccess] = useState(false);
   const [contentLoading, setContentLoading] = useState(true);
   const email = sessionStorage.getItem("email");
@@ -21,6 +22,21 @@ const AddService = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const handleImageUpload = (e) => {
+    console.log("e", e.target.files[0]);
+    const imageData = new FormData();
+    imageData.set("key", "c2772d06761e65ea8652500494ef14a7");
+    imageData.append("image", e.target.files[0]);
+    axios
+      .post("https://api.imgbb.com/1/upload", imageData)
+      .then(function (response) {
+        setImageURL(response.data.data.display_url);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     axios.post(CHECK_ACCESS_API, { email: email }).then((res) => {
@@ -31,19 +47,14 @@ const AddService = () => {
 
   const onSubmit = (data, e) => {
     setSubmitting(true);
-    const formData = new FormData();
-    formData.append("image", data.image[0]);
-    formData.append("title", data.title);
-    formData.append("price", data.price);
-    formData.append("description", data.description);
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
+    data.image = imageURL;
     axios
-      .post(CREATE_NEW_SERVICE_API, formData)
+      .post(CREATE_NEW_SERVICE_API, data)
       .then((res) => {
         setSubmitting(false);
+        // console.log(res);
         if (res.data.insertedId) {
+          setImageURL(null);
           toast.success("Service added successfully");
           e.target.reset();
         }
@@ -87,14 +98,8 @@ const AddService = () => {
                             className="border-danger"
                             type="file"
                             name="image"
-                            {...register("image", { required: true })}
+                            onChange={handleImageUpload}
                           />
-
-                          {errors.image && (
-                            <Form.Text className="text-danger">
-                              Service image is required!
-                            </Form.Text>
-                          )}
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -158,7 +163,11 @@ const AddService = () => {
                         </Form.Group>
 
                         <div>
-                          <button className="btn btn-primary" type="submit">
+                          <button
+                            className="btn btn-primary"
+                            disabled={imageURL === null ? true : false}
+                            type="submit"
+                          >
                             {submitting ? <LoadingButton /> : "Add Service"}
                           </button>
                         </div>

@@ -18,7 +18,7 @@ const WhatWeProvide = () => {
           </p>
         </Row>
         <Row className="g-4 mt-4">
-          <Col md={4}>
+          <Col md={6} lg={4}>
             <Card className="border-0 rounded p-3 py-4 ps-4">
               <div className="d-flex align-items-center mb-3">
                 <RiTShirtLine className="me-3 fs-2 text-danger" />
@@ -30,7 +30,7 @@ const WhatWeProvide = () => {
               </p>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={6} lg={4}>
             <Card className="border-0 rounded p-3 py-4 ps-4">
               <div className="d-flex align-items-center mb-3">
                 <IoWaterOutline className="me-3 fs-1 text-danger" />
@@ -42,7 +42,7 @@ const WhatWeProvide = () => {
               </p>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={6} lg={4}>
             <Card className="border-0 rounded p-3 py-4 ps-4">
               <div className="d-flex align-items-center mb-3">
                 <BsFiles className="me-3 fs-2 text-danger" />
@@ -54,7 +54,7 @@ const WhatWeProvide = () => {
               </p>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={6} lg={4}>
             <Card className="border-0 rounded p-3 py-4 ps-4">
               <div className="d-flex align-items-center mb-3">
                 <IoImagesOutline className="me-3 fs-2 text-danger" />
@@ -66,7 +66,7 @@ const WhatWeProvide = () => {
               </p>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={6} lg={4}>
             <Card className="border-0 rounded p-3 py-4 ps-4">
               <div className="d-flex align-items-center mb-3">
                 <BsCaretRight className="me-3 fs-1 text-danger" />
@@ -78,7 +78,7 @@ const WhatWeProvide = () => {
               </p>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={6} lg={4}>
             <Card className="border-0 rounded p-3 py-4 ps-4">
               <div className="d-flex align-items-center mb-3">
                 <GiBigDiamondRing className="me-3 fs-2 text-danger" />

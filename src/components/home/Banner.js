@@ -6,7 +6,7 @@ const Banner = () => {
   return (
     <section className="bg-info banner__container d-flex align-items-center">
       <Container>
-        <Row className="d-flex align-items-center py-5">
+        <Row className="d-flex align-items-center py-5 g-4">
           <Col md={5} className="offset-md-1">
             <h1 className="display-1 fw-bold text-primary">
               IM<span className="text-danger">A</span>GES <br /> MAT

@@ -24,11 +24,11 @@ const Service = () => {
       ) : (
         <>
           {serviceDetails.length > 0 && (
-            <Row className="d-flex justify-content-center align-items-start">
+            <Row className="d-flex justify-content-center align-items-start g-4">
               <Col md={5}>
                 <img
                   className="img-fluid"
-                  src={`data:${serviceDetails[0].image.contentType};base64,${serviceDetails[0].image.img}`}
+                  src={serviceDetails[0].image}
                   alt={serviceDetails[0].title}
                 />
               </Col>

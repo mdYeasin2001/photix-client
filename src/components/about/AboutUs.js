@@ -6,7 +6,7 @@ const AboutUs = () => {
   return (
     <section className="d-flex align-items-center">
       <Container>
-        <Row className="d-flex align-items-center py-5">
+        <Row className="d-flex align-items-center py-5 g-4">
           <Col md={5}>
             <img className="img-fluid" src={camera} alt="camera" />
           </Col>

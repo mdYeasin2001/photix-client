@@ -1,4 +1,5 @@
 const BASE_URL = "https://limitless-falls-07707.herokuapp.com";
+// const BASE_URL = "http://localhost:8080";
 export const CREATE_NEW_SERVICE_API = `${BASE_URL}/add-service`;
 export const SERVICES_LIST_API = `${BASE_URL}/services`;
 export const MAKE_ORDER_API = `${BASE_URL}/take-order`;

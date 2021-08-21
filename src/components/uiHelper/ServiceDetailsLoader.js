@@ -10,7 +10,7 @@ const ServiceDetailsLoader = () => {
       </Col>
       <Col md={7}>
         <div>
-          <Skeleton height={20} width={400} />
+          <Skeleton height={20} />
         </div>
         <div className="mb-3">
           <Skeleton height={20} width={100} />

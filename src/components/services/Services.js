@@ -36,12 +36,12 @@ const Services = () => {
           <Row className="g-4 mt-4">
             {services.length > 0 ? (
               services.map((service) => (
-                <Col md={4} key={service._id}>
+                <Col md={6} lg={4} key={service._id}>
                   <Card>
                     <Card.Img
                       className="service-image img-fluid w-100"
                       variant="top"
-                      src={`data:${service.image.contentType};base64,${service.image.img}`}
+                      src={service.image}
                     />
                     <Card.Body>
                       <h4 className="text-primary">{service.title}</h4>
