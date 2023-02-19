@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
-  CHECK_ACCESS_API,
   ORDER_LIST_API,
   UPDATE_ORDER_STATUS_API,
 } from "../../services/apiUrl";
@@ -12,27 +11,27 @@ import NotFoundDetails from "../uiHelper/NotFoundDetails";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
-  const email = sessionStorage.getItem("email");
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const [contentLoading, setContentLoading] = useState(true);
   const [loadAgain, setLoadAgain] = useState(null);
-  const [haveAccess, setHaveAccess] = useState(false);
   useEffect(() => {
-    axios.post(CHECK_ACCESS_API, { email: email }).then((res) => {
-      setHaveAccess(res.data);
-    });
-    axios.post(ORDER_LIST_API, { email: email }).then((res) => {
-      setOrders(res.data);
+    axios.post(ORDER_LIST_API, { email: user?.email }).then((res) => {
+      setOrders(res.data.data.orders);
       setContentLoading(false);
     });
-  }, [email, loadAgain]);
+  }, [user, loadAgain]);
 
   const updateStatus = (id, status) => {
     axios
       .patch(UPDATE_ORDER_STATUS_API, { id, status })
       .then((res) => {
         // console.log("res", res);
-        setLoadAgain(new Date().getTime());
-        toast.success("Order status updated successfully");
+        if (res.data.status === 'success') {
+          setLoadAgain(new Date().getTime());
+          toast.success("Order status updated successfully");
+        } else {
+          toast.error('Something went wrong!')
+        }
       })
       .catch((err) => {
         toast.error("Oops! Please try again later");
@@ -42,7 +41,7 @@ const ManageOrders = () => {
     <section className="py-5">
       {!contentLoading ? (
         <>
-          {haveAccess ? (
+          {user?.role === 'admin' ? (
             <Container className="my__orders__container d-flex align-items-center">
               {orders.length > 0 ? (
                 <table className="table">
@@ -65,15 +64,14 @@ const ManageOrders = () => {
                         <td>{order.service.price}</td>
                         <td>
                           <span
-                            className={`badge rounded-pill ${
-                              order.status === "pending"
-                                ? "bg-warning"
-                                : order.status === "inprogress"
+                            className={`badge rounded-pill ${order.status === "pending"
+                              ? "bg-warning"
+                              : order.status === "inprogress"
                                 ? "bg-primary"
                                 : order.status === "done"
-                                ? "bg-success"
-                                : ""
-                            }`}
+                                  ? "bg-success"
+                                  : ""
+                              }`}
                           >
                             {order.status}
                           </span>
@@ -90,7 +88,7 @@ const ManageOrders = () => {
                             </button>
                           )}
                           {order.status === "pending" ||
-                          order.status === "inprogress" ? (
+                            order.status === "inprogress" ? (
                             <button
                               onClick={() => updateStatus(order._id, "done")}
                               className="btn btn-success me-2"

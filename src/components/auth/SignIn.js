@@ -1,15 +1,13 @@
-import firebase from "firebase/app";
-import "firebase/auth";
+import axios from "axios";
 import React, { useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import firebaseConfig from "../../firebase.config";
+import { LOGIN_API } from "../../services/apiUrl";
 import LoadingButton from "../uiHelper/LoadingButton";
 
-!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
 const SignIn = () => {
   const history = useHistory();
@@ -27,17 +25,17 @@ const SignIn = () => {
 
   const onSubmit = (data) => {
     setSubmitting(true);
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(data.email, data.password)
-      .then((userCredential) => {
-        // Signed in
+    axios
+      .post(LOGIN_API, data)
+      .then((res) => {
         setSubmitting(false);
-        const user = userCredential.user;
-        sessionStorage.setItem("email", user.email);
-        toast.success("login successful");
-        setTimeout(() => history.replace(from), 2000);
-        // ...
+        if (res.data.status === 'success') {
+          sessionStorage.setItem("user", JSON.stringify(res.data.data.user));
+          toast.success("login successful");
+          setTimeout(() => history.replace(from), 2000);
+        } else {
+          toast.error(res.data.message);
+        }
       })
       .catch((error) => {
         // var errorCode = error.code;

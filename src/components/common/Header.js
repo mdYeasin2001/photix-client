@@ -1,5 +1,3 @@
-import firebase from "firebase/app";
-import "firebase/auth";
 import React from "react";
 import { Col, Container, Nav, Row } from "react-bootstrap";
 import { AiFillPhone } from "react-icons/ai";
@@ -8,27 +6,15 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { RiDashboardLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import firebaseConfig from "../../firebase.config";
-
-!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
 const Header = () => {
   const history = useHistory();
-  const email = sessionStorage.getItem("email");
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const signOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        // Sign-out successful.
-        sessionStorage.removeItem("email");
-        toast.success("You have signed out.");
-        setTimeout(() => history.push("/"), 2000);
-      })
-      .catch((error) => {
-        // An error happened.
-        toast.error("Oops! Please try again");
-      });
+
+    sessionStorage.removeItem("user");
+    toast.success("You have signed out.");
+    setTimeout(() => history.push("/"), 2000);
   };
   return (
     <>
@@ -48,7 +34,7 @@ const Header = () => {
             </Col>
             <Col md={6}>
               <div className="d-flex justify-content-end gap-3 fw-bold">
-                {email ? (
+                {user?.email ? (
                   <>
                     <Nav.Link
                       onClick={() => history.push("/dashboard/my-orders")}

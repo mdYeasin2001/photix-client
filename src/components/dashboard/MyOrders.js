@@ -7,14 +7,14 @@ import NotFoundDetails from "../uiHelper/NotFoundDetails";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
-  const email = sessionStorage.getItem("email");
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const [contentLoading, setContentLoading] = useState(true);
   useEffect(() => {
-    axios.post(ORDER_LIST_BY_EACH_USER_API, { email: email }).then((res) => {
-      setOrders(res.data);
+    axios.post(ORDER_LIST_BY_EACH_USER_API, { email: user?.email }).then((res) => {
+      setOrders(res.data.data.orders);
       setContentLoading(false);
     });
-  }, [email]);
+  }, [user]);
   return (
     <section className="py-5">
       {!contentLoading ? (
@@ -39,15 +39,14 @@ const MyOrders = () => {
                     <td>{order.service.price}</td>
                     <td>
                       <span
-                        className={`badge rounded-pill ${
-                          order.status === "pending"
-                            ? "bg-warning"
-                            : order.status === "inprogress"
+                        className={`badge rounded-pill ${order.status === "pending"
+                          ? "bg-warning"
+                          : order.status === "inprogress"
                             ? "bg-primary"
                             : order.status === "done"
-                            ? "bg-success"
-                            : ""
-                        }`}
+                              ? "bg-success"
+                              : ""
+                          }`}
                       >
                         {order.status}
                       </span>

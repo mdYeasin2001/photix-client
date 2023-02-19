@@ -2,12 +2,12 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
 const PrivateRouter = ({ children, ...rest }) => {
-  const email = sessionStorage.getItem("email");
+  const user = JSON.parse(sessionStorage.getItem("user"));
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        email ? (
+        user?.email ? (
           children
         ) : (
           <Redirect

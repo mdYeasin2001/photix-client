@@ -9,8 +9,8 @@ import LoadingButton from "../uiHelper/LoadingButton";
 
 const Checkout = () => {
   const { id } = useParams();
-  const [service, setService] = useState([]);
-  const email = sessionStorage.getItem("email");
+  const [service, setService] = useState({});
+  const user = JSON.parse(sessionStorage.getItem("user"));
   useEffect(() => {
     axios.get(`${SERVICES_LIST_API}/${id}`).then((res) => setService(res.data));
   }, [id]);
@@ -22,19 +22,19 @@ const Checkout = () => {
   } = useForm();
 
   const onSubmit = (data, e) => {
-    data.service = service[0];
+    data.service = service;
     data.status = "pending";
-    data.logged_user_email = email;
+    data.logged_user_email = user?.email;
     setSubmitting(true);
 
-    if (service.length > 0) {
+    if (Object.keys(service).length > 0) {
       //   console.log("data", data);
       axios
         .post(MAKE_ORDER_API, data)
         .then((res) => {
           setSubmitting(false);
           //   console.log(res);
-          if (res.data.insertedId) {
+          if (res.data.status === 'success') {
             toast.success("Order taken successfully");
             e.target.reset();
           }

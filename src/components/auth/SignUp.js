@@ -1,15 +1,13 @@
-import firebase from "firebase/app";
-import "firebase/auth";
+import axios from "axios";
 import React, { useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import firebaseConfig from "../../firebase.config";
+import { SIGNUP_API } from "../../services/apiUrl";
 import LoadingButton from "../uiHelper/LoadingButton";
 
-!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
 const SignUp = () => {
   const history = useHistory();
@@ -26,18 +24,21 @@ const SignUp = () => {
     if (data.password === data.confirm_password) {
       setSubmitting(true);
       setError(null);
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(data.email, data.password)
-        .then((userCredential) => {
-          // Signed in
-          toast.success("Registration successful");
+      delete data.confirm_password;
+      axios
+        .post(SIGNUP_API, data)
+        .then((res) => {
           setSubmitting(false);
-          //   const user = userCredential.user;
-          //   console.log("user created", user.email);
-          e.target.reset();
-          setTimeout(() => history.push("/login"), 2000);
-          // ...
+          if (res.data.status === 'success') {
+            // Signed in
+            toast.success("Registration successful");
+            //   const user = userCredential.user;
+            //   console.log("user created", user.email);
+            e.target.reset();
+            setTimeout(() => history.push("/login"), 2000);
+          } else {
+            toast.error(res.data.message);
+          }
         })
         .catch((error) => {
           //   const errorCode = error.code;
@@ -64,6 +65,24 @@ const SignUp = () => {
             <Col md={6} className="offset-md-3">
               <h1 className="text-primary mb-3">Register</h1>
               <form onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-secondary">
+                    Username <span className="text-danger">*</span>
+                  </Form.Label>
+                  <Form.Control
+                    className="border-danger"
+                    type="text"
+                    name="username"
+                    {...register("username", { required: true })}
+                  />
+
+                  {errors.username && (
+                    <Form.Text className="text-danger">
+                      Enter your username.
+                    </Form.Text>
+                  )}
+                </Form.Group>
+
                 <Form.Group className="mb-3">
                   <Form.Label className="text-secondary">
                     Email address <span className="text-danger">*</span>

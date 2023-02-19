@@ -2,11 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import {
-  CHECK_ACCESS_API,
   MANAGE_SERVICES_LIST_API,
 } from "../../services/apiUrl";
 import DeleteConfirmationModal from "../Modal/DeleteConfirmationModal";
-import LoadingSpinner from "../uiHelper/LoadingSpinner";
 import NotFoundDetails from "../uiHelper/NotFoundDetails";
 
 const ManageServices = () => {
@@ -15,18 +13,12 @@ const ManageServices = () => {
     useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [reload, setReload] = useState(null);
-  const email = sessionStorage.getItem("email");
-  const [contentLoading, setContentLoading] = useState(true);
-  const [haveAccess, setHaveAccess] = useState(false);
+  const user = JSON.parse(sessionStorage.getItem("user"));
   useEffect(() => {
-    axios.post(CHECK_ACCESS_API, { email: email }).then((res) => {
-      setHaveAccess(res.data);
+    axios.post(MANAGE_SERVICES_LIST_API, { email: user?.email }).then((res) => {
+      setServices(res.data.data.services);
     });
-    axios.post(MANAGE_SERVICES_LIST_API, { email: email }).then((res) => {
-      setServices(res.data);
-      setContentLoading(false);
-    });
-  }, [email, reload]);
+  }, [user, reload]);
   return (
     <section className="py-5">
       <DeleteConfirmationModal
@@ -36,50 +28,47 @@ const ManageServices = () => {
         setReload={setReload}
         setShowDeleteConfirmationModal={setShowDeleteConfirmationModal}
       />
-      {!contentLoading ? (
-        <>
-          {haveAccess ? (
-            <Container className="my__orders__container d-flex align-items-center">
-              {services.length > 0 ? (
-                <table className="table">
-                  <thead>
-                    <tr className="bg-info">
-                      <th scope="col">Title</th>
-                      <th scope="col">Price</th>
-                      <th scope="col">Action</th>
+
+      <>
+        {user.role === 'admin' ? (
+          <Container className="my__orders__container d-flex align-items-center">
+            {services.length > 0 ? (
+              <table className="table">
+                <thead>
+                  <tr className="bg-info">
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {services.map((service) => (
+                    <tr key={service._id} className="bg-info">
+                      <th scope="row">{service.title}</th>
+                      <td>{service.price}</td>
+                      <td>
+                        <button
+                          onClick={() => {
+                            setSelectedServiceId(service._id);
+                            setShowDeleteConfirmationModal(true);
+                          }}
+                          className="btn btn-danger text-white"
+                        >
+                          delete
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {services.map((service) => (
-                      <tr key={service._id} className="bg-info">
-                        <th scope="row">{service.title}</th>
-                        <td>{service.price}</td>
-                        <td>
-                          <button
-                            onClick={() => {
-                              setSelectedServiceId(service._id);
-                              setShowDeleteConfirmationModal(true);
-                            }}
-                            className="btn btn-danger text-white"
-                          >
-                            delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <NotFoundDetails data="No service Found!" />
-              )}
-            </Container>
-          ) : (
-            <NotFoundDetails data="404 Not Found!" />
-          )}
-        </>
-      ) : (
-        <LoadingSpinner />
-      )}
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <NotFoundDetails data="No service Found!" />
+            )}
+          </Container>
+        ) : (
+          <NotFoundDetails data="404 Not Found!" />
+        )}
+      </>
     </section>
   );
 };

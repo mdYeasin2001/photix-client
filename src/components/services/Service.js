@@ -7,7 +7,7 @@ import ServiceDetailsLoader from "../uiHelper/ServiceDetailsLoader";
 
 const Service = () => {
   const { id } = useParams();
-  const [serviceDetails, setServiceDetails] = useState([]);
+  const [serviceDetails, setServiceDetails] = useState({});
   const history = useHistory();
   const [contentLoading, setContentLoading] = useState(true);
 
@@ -23,31 +23,31 @@ const Service = () => {
         <ServiceDetailsLoader />
       ) : (
         <>
-          {serviceDetails.length > 0 && (
+          {Object.keys(serviceDetails).length > 0 && (
             <Row className="d-flex justify-content-center align-items-start g-4">
               <Col md={5}>
                 <img
                   className="img-fluid"
-                  src={serviceDetails[0].image}
-                  alt={serviceDetails[0].title}
+                  src={serviceDetails.image}
+                  alt={serviceDetails.title}
                 />
               </Col>
               <Col md={7}>
                 <h5 className="text-primary fw-normal">
-                  {serviceDetails[0].title}
+                  {serviceDetails.title}
                 </h5>
                 <h6 className="text-primary display-6">
-                  $ {serviceDetails[0].price}
+                  $ {serviceDetails.price}
                 </h6>
                 <span className="text-secondary border-bottom border-danger border-5 mb-3 d-inline-block">
                   Description:
                 </span>
                 <p className="text-secondary lead">
-                  {serviceDetails[0].description}
+                  {serviceDetails.description}
                 </p>
                 <button
                   onClick={() =>
-                    history.push(`/checkout/service/${serviceDetails[0]._id}`)
+                    history.push(`/checkout/service/${serviceDetails._id}`)
                   }
                   className="btn btn-danger text-white"
                 >

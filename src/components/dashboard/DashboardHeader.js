@@ -1,19 +1,11 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { CHECK_ACCESS_API } from "../../services/apiUrl";
 import Header from "../common/Header";
 
 const DashboardHeader = () => {
   const history = useHistory();
-  const [haveAccess, setHaveAccess] = useState(false);
-  const email = sessionStorage.getItem("email");
-  useEffect(() => {
-    axios.post(CHECK_ACCESS_API, { email: email }).then((res) => {
-      setHaveAccess(res.data);
-    });
-  }, [email]);
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
   return (
     <>
       <Header />
@@ -36,7 +28,7 @@ const DashboardHeader = () => {
               >
                 My Orders
               </Nav.Link>
-              {haveAccess && (
+              {user?.role === 'admin' && (
                 <>
                   <Nav.Link
                     onClick={() => history.push("/dashboard/manage-orders")}

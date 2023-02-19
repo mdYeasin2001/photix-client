@@ -21,10 +21,12 @@ const DeleteConfirmationModal = ({
       .then((res) => {
         setSubmitting(false);
         // console.log(res);
-        if (res.data.deletedCount > 0) {
+        if (res.data.status === 'success') {
           toast.success("Service deleted successfully");
           setReload(new Date().getTime());
           setShowDeleteConfirmationModal(false);
+        } else {
+          toast.error('Something went wrong!')
         }
       })
       .catch((err) => {
